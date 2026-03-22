@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Page Assistant</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="app-shell">
+    <section class="hero-panel">
+      <div class="header">
+        <div class="header-copy">
+          <div class="product-kicker">Contextual browser copilot</div>
+          <h1>AI Page Assistant</h1>
+          <p class="subtitle">Ground your questions in the live page, then turn answers into notes you can reuse.</p>
+        </div>
+        <div class="header-actions">
+          <button id="clear-chat" class="btn-small" title="Clear chat for this page">Clear</button>
+          <button id="toggle-settings" title="Settings" class="icon-btn">⚙</button>
+        </div>
+      </div>
+      <div class="hero-footer">
+        <div class="hero-chip-row">
+          <span class="hero-chip">Page-aware</span>
+          <span class="hero-chip">Multi-workflow</span>
+          <span class="hero-chip">Cited answers</span>
+        </div>
+        <div class="status-area" id="status-message"></div>
+      </div>
+    </section>
+
+    <div id="settings-panel" class="panel settings-panel hidden">
+      <div class="panel-heading compact-heading">
+        <span class="eyebrow">Settings</span>
+      </div>
+      <label for="api-key">Gemini API Key</label>
+      <input type="password" id="api-key" placeholder="AIzaSy...">
+      <div class="panel-actions">
+        <button id="save-settings" class="btn-small">Save</button>
+      </div>
+    </div>
+
+    <section class="panel page-panel">
+      <div class="panel-heading">
+        <div>
+          <span class="eyebrow">Current Page</span>
+          <div id="page-title" class="page-title">Waiting for page context...</div>
+        </div>
+        <button id="refresh-context" class="btn-small">Refresh</button>
+      </div>
+      <div id="page-url" class="page-url"></div>
+      <div id="page-badges" class="page-badges"></div>
+      <div class="control-grid">
+        <label for="scope-select">
+          Scope
+          <select id="scope-select">
+            <option value="relevant">Relevant chunks</option>
+            <option value="visible">Visible area</option>
+            <option value="whole">Whole page</option>
+            <option value="selection">Selection only</option>
+          </select>
+        </label>
+        <label for="workflow-select">
+          Workflow
+          <select id="workflow-select"></select>
+        </label>
+        <label for="answer-mode-select" class="wide-control">
+          Answer mode
+          <select id="answer-mode-select">
+            <option value="page_grounded">Page-grounded</option>
+            <option value="contextual">Context + General Knowledge</option>
+            <option value="general_with_context">General Chat + Page Context</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section class="panel composer-panel">
+      <div class="composer-header">
+        <div>
+          <span class="eyebrow">Compose</span>
+          <div id="composer-summary" class="composer-summary">Ask Page · Relevant chunks · Context + General Knowledge</div>
+        </div>
+        <div class="shortcut-hint">Ctrl/Cmd + Enter</div>
+      </div>
+      <textarea id="question-input" rows="4" placeholder="Ask a question about the page or add comparison criteria..."></textarea>
+      <div class="primary-actions">
+        <button id="btn-run" class="btn primary">Run Workflow</button>
+        <button id="btn-export" class="btn">Export Markdown</button>
+      </div>
+      <div class="secondary-actions">
+        <button id="btn-copy" class="btn-small hidden" title="Copy latest answer">Copy</button>
+        <button id="btn-save-note" class="btn-small hidden" title="Save latest answer as note">Save Note</button>
+      </div>
+      <div class="quick-actions-wrap">
+        <div class="quick-actions-label">Quick actions</div>
+        <div class="quick-actions" id="quick-actions">
+          <button class="chip-btn" data-workflow="tldr">TL;DR</button>
+          <button class="chip-btn" data-workflow="key_takeaways">Key Takeaways</button>
+          <button class="chip-btn" data-workflow="action_items">Action Items</button>
+          <button class="chip-btn" data-workflow="explain_selection">Explain Selection</button>
+          <button class="chip-btn" data-workflow="dates_deadlines">Dates & Deadlines</button>
+          <button class="chip-btn" data-workflow="compare_options">Compare Options</button>
+          <button class="chip-btn" data-workflow="turn_into_notes">Turn Into Notes</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel workspace-panel">
+      <div class="workspace-header">
+        <div>
+          <span class="eyebrow">Workspace</span>
+          <div class="workspace-summary">Review answers, supporting evidence, and saved notes without stretching the popup.</div>
+        </div>
+        <div id="loading" class="hidden loading-state">
+          <div class="spinner"></div>
+          <span>Thinking...</span>
+        </div>
+      </div>
+      <div class="workspace-tabs" id="workspace-tabs">
+        <button class="workspace-tab active" data-panel="conversation">
+          Conversation
+          <span id="conversation-count" class="tab-count">0</span>
+        </button>
+        <button class="workspace-tab" data-panel="evidence">
+          Evidence
+          <span id="evidence-count" class="tab-count">0</span>
+        </button>
+        <button class="workspace-tab" data-panel="notes">
+          Notes
+          <span id="notes-count" class="tab-count">0</span>
+        </button>
+      </div>
+      <div class="workspace-panes">
+        <div class="workspace-pane" data-panel="conversation">
+          <div id="conversation-thread" class="conversation-thread"></div>
+        </div>
+        <div class="workspace-pane hidden" data-panel="evidence">
+          <div id="evidence-output" class="stack-list empty-state">Run a workflow to see supporting chunks from the page.</div>
+        </div>
+        <div class="workspace-pane hidden" data-panel="notes">
+          <div id="notes-output" class="stack-list empty-state">Saved notes for this page will appear here.</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
