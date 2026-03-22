@@ -50,7 +50,7 @@
   ],
   "browser_specific_settings": {
     "gecko": {
-      "id": "ai-page-assistant@example.com",
+      "id": "{ac752e54-87b9-469d-8b82-989b846ff03a}",
       "strict_min_version": "142.0",
       "data_collection_permissions": {
         "required": [
